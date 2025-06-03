@@ -1,0 +1,24 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>HugoEMSApp</PageTitle>
+
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+    <AuthorizeView>
+        <Authorized>
+            <main>
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </Authorized>
+        <NotAuthorized>
+            <h2>Not Authorized</h2>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+    
+
