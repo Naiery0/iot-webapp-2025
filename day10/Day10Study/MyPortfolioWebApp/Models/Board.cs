@@ -14,7 +14,7 @@ public partial class Board
 
     [DisplayName("이메일")]
     [Required]
-    public string Email { get; set; } = null!;
+    public string Email { get; set; }
 
     [DisplayName("작성자")]
     [BindNever]
@@ -22,11 +22,11 @@ public partial class Board
 
     [DisplayName("글 제목")]
     [Required]
-    public string Title { get; set; } = null!;
+    public string Title { get; set; }
 
     [DisplayName("글 내용")]
     [Required]
-    public string Contents { get; set; } = null!;
+    public string Contents { get; set; } 
 
     [DisplayName("작성일")]
     [DisplayFormat(DataFormatString = "{0:yyyy년 MM월 dd일}", ApplyFormatInEditMode = true)]
