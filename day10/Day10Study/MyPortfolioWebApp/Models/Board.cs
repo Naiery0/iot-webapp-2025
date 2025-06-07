@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,7 @@ public partial class Board
     public string Email { get; set; } = null!;
 
     [DisplayName("작성자")]
+    [BindNever]
     public string? Writer { get; set; }
 
     [DisplayName("글 제목")]
@@ -28,8 +30,10 @@ public partial class Board
 
     [DisplayName("작성일")]
     [DisplayFormat(DataFormatString = "{0:yyyy년 MM월 dd일}", ApplyFormatInEditMode = true)]
+    [BindNever]
     public DateTime? PostDate { get; set; }
 
     [DisplayName("조회수")]
+    [BindNever]
     public int? ReadCount { get; set; }
 }
