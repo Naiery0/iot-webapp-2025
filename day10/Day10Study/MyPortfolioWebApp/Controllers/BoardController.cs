@@ -92,7 +92,7 @@ namespace MyPortfolioWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Email,Writer,Title,Contents,PostDate,ReadCount")] Board board)
+        public async Task<IActionResult> Create([Bind("Id,Title,Contents")] Board board)
         {
             if (ModelState.IsValid)
             {
