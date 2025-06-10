@@ -19,6 +19,7 @@
                 <form asp-controller="Board" asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <!-- 화면에는 나타나지 않지만 HTML 구조상에 포함된 값 -->
+                    <input asp-for="Email" type="hidden" />
                     <input asp-for="Writer" type="hidden" />
                     <input asp-for="PostDate" type="hidden" />
                     <input asp-for="ReadCount" type="hidden" />

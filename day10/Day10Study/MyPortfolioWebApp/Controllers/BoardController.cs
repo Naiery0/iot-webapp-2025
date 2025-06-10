@@ -98,7 +98,8 @@ namespace MyPortfolioWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Email,Writer,Title,Contents,PostDate,ReadCount")] Board board)
+        // <form asp-controller="News" asp-action="Create"> 이 http://localhost:5234/News/Create 포스트메서드 호출
+        public async Task<IActionResult> Create([Bind("Email,Title,Contents")] Board board)
         {
             if (ModelState.IsValid)
             {
@@ -111,7 +112,7 @@ namespace MyPortfolioWebApp.Controllers
                 // COMMIT
                 await _context.SaveChangesAsync();
 
-                TempData["success"] = "뉴스 저장 성공!";
+                TempData["success"] = "게시글 저장 성공!";
                 return RedirectToAction(nameof(Index));
             }
             return View(board);
@@ -149,8 +150,21 @@ namespace MyPortfolioWebApp.Controllers
             {
                 try
                 {
-                    _context.Update(board);
+                    // 방식2 원본을 찾아서 수정해주는 방식
+                    var existingBoard = await _context.Board.FindAsync(id);
+                    if (existingBoard == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingBoard.Title = board.Title;
+                    existingBoard.Contents = board.Contents;
+
+                    // UPDATE News SET ...
+                    //_context.Update(news); // 방식1 ID가 같은 새글을 UPDATE하면 수정                    
+                    // COMMIT
                     await _context.SaveChangesAsync();
+                    TempData["success"] = "뉴스 수정 성공!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
