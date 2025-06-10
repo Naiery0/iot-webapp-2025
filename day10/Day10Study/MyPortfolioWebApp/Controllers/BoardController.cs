@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyPortfolioWebApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyPortfolioWebApp.Controllers
 {
@@ -22,8 +22,11 @@ namespace MyPortfolioWebApp.Controllers
         // GET: Board
         public async Task<IActionResult> Index(int page = 1, string search = "")
         {
+            // 뷰쪽에 보내고 싶은 데이터
+            
             ViewData["Title"] = "서버에서 변경가능";
-            // _context.Board = Models의 Board.cs 
+            // 최종단계
+            // 페이지 개수
             var totalCount = _context.Board.Where(n => EF.Functions.Like(n.Title, $"%{search}%")).Count(); // HACK! 위 구문이 오류발생
             var countList = 10; // 한페이지에 기본 뉴스갯수 10개
             var totalPage = totalCount / countList; // 한페이지당 개수로 나누면 전체페이지 수
@@ -69,13 +72,15 @@ namespace MyPortfolioWebApp.Controllers
                 return NotFound();
             }
 
+            // 조회수 증가 로직
             board.ReadCount++;
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
+
             return View(board);
         }
 
-        // GET: Board/Create
+        // GET: http://localhost:5234/News/Create GET method로 호출!!
         public IActionResult Create()
         {
             var board = new Board
@@ -84,15 +89,16 @@ namespace MyPortfolioWebApp.Controllers
                 PostDate = DateTime.Now,
                 ReadCount = 0,
             };
-            return View();
+            return View(board);  // View로 데이터를 가져갈게 아무것도 없음
         }
+
 
         // POST: Board/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Contents")] Board board)
+        public async Task<IActionResult> Create([Bind("Id,Email,Writer,Title,Contents,PostDate,ReadCount")] Board board)
         {
             if (ModelState.IsValid)
             {
@@ -100,9 +106,12 @@ namespace MyPortfolioWebApp.Controllers
                 board.PostDate = DateTime.Now; // 게시일자는 현재
                 board.ReadCount = 0;
 
+                // INSERT INTO...
                 _context.Add(board);
+                // COMMIT
                 await _context.SaveChangesAsync();
-                TempData["success"] = "게시물 저장 성공!";
+
+                TempData["success"] = "뉴스 저장 성공!";
                 return RedirectToAction(nameof(Index));
             }
             return View(board);
@@ -129,7 +138,7 @@ namespace MyPortfolioWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Contents")] Board board)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Writer,Title,Contents,PostDate,ReadCount")] Board board)
         {
             if (id != board.Id)
             {
@@ -140,21 +149,8 @@ namespace MyPortfolioWebApp.Controllers
             {
                 try
                 {
-                    // 방식2 원본을 찾아서 수정해주는 방식
-                    var existingBoard = await _context.Board.FindAsync(id);
-                    if (existingBoard == null)
-                    {
-                        return NotFound();
-                    }
-
-                    existingBoard.Title = board.Title;
-                    existingBoard.Contents = board.Contents;
-
-                    // UPDATE Board SET ...
-                    //_context.Update(board); // 방식1 ID가 같은 새글을 UPDATE하면 수정                    
-                    // COMMIT
+                    _context.Update(board);
                     await _context.SaveChangesAsync();
-                    TempData["success"] = "게시물 수정 성공!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -202,7 +198,6 @@ namespace MyPortfolioWebApp.Controllers
             }
 
             await _context.SaveChangesAsync();
-            TempData["success"] = "게시물 삭제 성공!";
             return RedirectToAction(nameof(Index));
         }
 
