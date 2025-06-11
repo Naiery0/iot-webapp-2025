@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using MyPortfolioWebApp.Models;
 using System;
 using System.Collections.Generic;
@@ -85,6 +86,7 @@ namespace MyPortfolioWebApp.Controllers
         {
             var board = new Board
             {
+                Email = "admin@mail.com",
                 Writer = "관리자",
                 PostDate = DateTime.Now,
                 ReadCount = 0,
@@ -99,10 +101,11 @@ namespace MyPortfolioWebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         // <form asp-controller="News" asp-action="Create"> 이 http://localhost:5234/News/Create 포스트메서드 호출
-        public async Task<IActionResult> Create([Bind("Email,Title,Contents")] Board board)
+        public async Task<IActionResult> Create([Bind("Id,Email,Writer,Title,Contents,PostDate,ReadCount")] Board board)
         {
             if (ModelState.IsValid)
             {
+                board.Email = "admin@mail.com";
                 board.Writer = "관리자"; // 작성자는 자동으로 관리자
                 board.PostDate = DateTime.Now; // 게시일자는 현재
                 board.ReadCount = 0;
