@@ -31,9 +31,12 @@
                     <!-- 기존파일 영역 -->
                     <div class="form-group">
                         <label class="control-label">기존 첨부파일</label>
-                        @if (!string.IsNullOrEmpty(Model.UploadFile)) {
+                        @if (!string.IsNullOrEmpty(Model.UploadFile))
+                        {
                             <a href="~/upload/@Model.UploadFile" target="_blank">@Model.UploadFile</a>
-                        } else {
+                        }
+                        else
+                        {
                             <span class="text-muted">첨부파일 없음</span>
                         }
                     </div>
@@ -53,5 +56,7 @@
 </section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
