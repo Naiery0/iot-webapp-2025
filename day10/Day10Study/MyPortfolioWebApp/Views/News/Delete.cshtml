@@ -11,7 +11,7 @@
         <p>알려드리고자 하는 뉴스입니다</p>
     </div>
 
-    <div class="container" data-aos="fade-up" data-aos-delay="100">        
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div>
             <h4>삭제</h4>
             <h5>정말 삭제하시겠습니까?</h5>
@@ -36,6 +36,18 @@
                     @* @Html.DisplayFor(model => model.Description) *@
                     @Markdown.ParseHtmlString(Model.Description)
                 </dd>
+
+                <!-- 업로드파일 다운로드 영역 -->
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.UploadFile)
+                </dt>
+                <dd class="col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.UploadFile))
+                    {
+                        <a href="~/upload/@Model.UploadFile" target="_blank">@Model.UploadFile</a>
+                    }
+                </dd>
+
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.PostDate)
                 </dt>
@@ -59,4 +71,3 @@
 
     </div>
 </section>
-

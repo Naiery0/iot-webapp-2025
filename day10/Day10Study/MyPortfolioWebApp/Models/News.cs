@@ -31,5 +31,8 @@ namespace MyPortfolioWebApp.Models
         [DisplayName("조회수")]
         [BindNever]
         public int ReadCount { get; set; }
+
+        [DisplayName("첨부파일")]
+        public string? UploadFile { get; set; }
     }
 }
